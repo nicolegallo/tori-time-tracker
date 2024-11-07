@@ -1,0 +1,38 @@
+
+#main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    
+}
+
+header {
+    font-size: 100px;
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+}
+
+#timer-display {
+    margin: 0;
+    font-size: 150px;
+    text-align: center;
+}
+
+#timer-display p {
+    margin: 0;
+}
+
+button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+   
+}
+
+
