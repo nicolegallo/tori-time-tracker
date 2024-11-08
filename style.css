@@ -4,7 +4,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 70vh;
     
 }
 
@@ -27,12 +26,18 @@ h2 {
     margin: 0;
 }
 
-button {
+#button-container {
+    width: 50%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
-   
+    justify-content: space-evenly;
+    
 }
 
+button {
+    width: 130px;
+    padding: 0 10px 0 10px;
+}
 
+img {
+    width: 15%;
+}
