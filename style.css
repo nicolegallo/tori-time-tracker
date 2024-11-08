@@ -41,3 +41,11 @@ button {
 img {
     width: 15%;
 }
+
+#log-time {
+    padding-top: 20px;
+}
+
+#blurb-input {
+    width: 200px;
+}
