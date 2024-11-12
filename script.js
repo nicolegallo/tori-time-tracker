@@ -43,24 +43,23 @@ document.addEventListener("DOMContentLoaded", function() {
         logButton.disabled = true;
     });
 
-    // Logs the time entry with blurb and date when Log button is clicked
-    logButton.addEventListener("click", function() {
+    logButton.addEventListener("click", async function() {
         const timeText = formatTime(seconds);
         const blurbText = blurbInput.value || "NO BLURB";
-        const dateText = dateInput.value || "No Date"; // Uses date input or defaults to "No Date"
-
-        // Create a log entry object
+        const dateText = dateInput.value || "No Date";
+      
         const logEntry = { time: timeText, date: dateText, blurb: blurbText };
-        logs.push(logEntry); // Add to logs array
-        saveLogs(); // Save logs to local storage
-
-        displayLog(logEntry); // Display the new log entry in the list
-        updateTotalTime(); // Update the total time display
-
-        // Clear input fields
+        logs.push(logEntry);
+        
+        // Save to Firestore
+        await db.collection("logs").add(logEntry);
+      
+        displayLog(logEntry);
+        updateTotalTime();
         blurbInput.value = "";
         dateInput.value = "";
-    });
+      });
+      
 
     // Toggles visibility of edit and delete icons based on checkbox
     toggleEditDelete.addEventListener("change", function() {
@@ -78,15 +77,36 @@ document.addEventListener("DOMContentLoaded", function() {
         return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
 
-    // Saves logs to local storage
-    function saveLogs() {
-        localStorage.setItem("logs", JSON.stringify(logs));
-    }
+    // Saves logs to firebase
+    async function saveLogs() {
+        const logsCollection = db.collection("logs");
+      
+        // Clear existing logs in Firestore first
+        const snapshot = await logsCollection.get();
+        snapshot.forEach(doc => doc.ref.delete());
+      
+        // Add each log entry to Firestore
+        logs.forEach(log => {
+          logsCollection.add(log);
+        });
+      }
+      
 
-    // Loads logs from local storage and displays them
-    function loadLogs() {
-        logs.forEach(displayLog);
-    }
+    // Loads logs from firebase and displays them
+    async function loadLogs() {
+        const logsCollection = db.collection("logs");
+        const snapshot = await logsCollection.get();
+        
+        logs = []; // Clear the local logs array
+        snapshot.forEach(doc => {
+          const logData = doc.data();
+          logs.push(logData);
+          displayLog(logData);
+        });
+      
+        updateTotalTime(); // Update total time with the loaded data
+      }
+      
 
     // Displays a single log entry on the page
     function displayLog(logEntry) {
@@ -105,12 +125,22 @@ document.addEventListener("DOMContentLoaded", function() {
         deleteIcon.style.fontWeight = "bold";
         deleteIcon.classList.add("editable-icon");
         deleteIcon.style.display = toggleEditDelete.checked ? "inline" : "none";
-        deleteIcon.addEventListener("click", function() {
-            logList.removeChild(logItem); // Remove from DOM
-            logs = logs.filter(log => log !== logEntry); // Remove from logs array
-            saveLogs(); // Save updated logs to local storage
-            updateTotalTime(); // Update total time after deletion
-        });
+        deleteIcon.addEventListener("click", async function() {
+            logList.removeChild(logItem);
+            logs = logs.filter(log => log !== logEntry);
+          
+            // Remove from Firestore
+            const snapshot = await db.collection("logs")
+              .where("time", "==", logEntry.time)
+              .where("date", "==", logEntry.date)
+              .where("blurb", "==", logEntry.blurb)
+              .get();
+          
+            snapshot.forEach(doc => doc.ref.delete());
+          
+            updateTotalTime();
+          });
+          
 
         // Edit icon for modifying log entry
         const editIcon = document.createElement("span");
@@ -190,4 +220,21 @@ document.addEventListener("DOMContentLoaded", function() {
     myToriTimeHeader.addEventListener("click", function() {
         logContainer.style.display = logContainer.style.display === "none" ? "block" : "none";
     });
+
+
+      // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyC3YbPqyemR_EcOE8i1tfMJyMHOjHMe--Y",
+    authDomain: "tori-time-tracker.firebaseapp.com",
+    projectId: "tori-time-tracker",
+    storageBucket: "tori-time-tracker.firebasestorage.app",
+    messagingSenderId: "9686043328",
+    appId: "1:9686043328:web:9e9685e540de50d8657b25",
+    measurementId: "G-G5NVDR57DE"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
 });
