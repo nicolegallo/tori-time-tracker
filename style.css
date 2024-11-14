@@ -60,6 +60,16 @@ label {
     color:#880000;
 }
 
+
+#time-elapsed {
+    margin: 0;
+    color: white;
+    text-align: center;
+}
+#time-elapsed:hover {
+color: black;
+}
+
 #sfcxkfzepzmg5y4gx96xdwpn1mclnhb88jy {
     
 position: fixed;
