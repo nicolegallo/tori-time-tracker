@@ -69,12 +69,12 @@ color: black;
     
 position: fixed;
 bottom: 0;
-width: 75%;
+width: 50%;
     
 }
 
 #calculator-container {
-    padding-bottom: 50px;
+    padding-bottom: 75px;
 }
 
 #calculator-container button {
