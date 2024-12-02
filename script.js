@@ -4,20 +4,22 @@ let logs = JSON.parse(localStorage.getItem("logs")) || []; // Loads saved logs f
 
 document.addEventListener("DOMContentLoaded", function() {
     // Access DOM elements
-    const startButton = document.getElementById("start-button");
-    const stopButton = document.getElementById("stop-button");
-    const resetButton = document.getElementById("reset-button");
+   // const startButton = document.getElementById("start-button");
+  //  const stopButton = document.getElementById("stop-button");
+   // const resetButton = document.getElementById("reset-button");
     const timerDisplay = document.getElementById("timer-display");
     const logButton = document.getElementById("log-button");
     const logList = document.getElementById("log-list");
     const blurbInput = document.getElementById("blurb-input");
     const toggleEditDelete = document.getElementById("toggle-edit-delete");
+    const timeInput = document.getElementById("time-input");
     const dateInput = document.getElementById("date-input"); // New date input field
     const totalTimeDisplay = document.getElementById("total-time"); // Element to display total time
 
     loadLogs(); // Loads and displays any existing logs from local storage
     updateTotalTime(); // Calculates and displays the total time spent
 
+    /*
     // Starts the timer when Start button is clicked
     startButton.addEventListener("click", function() {
         clearInterval(timer);
@@ -42,10 +44,11 @@ document.addEventListener("DOMContentLoaded", function() {
         timerDisplay.textContent = "00:00:00";
         logButton.disabled = true;
     });
+    */
 
     // Logs the time entry with blurb and date when Log button is clicked
     logButton.addEventListener("click", function() {
-        const timeText = formatTime(seconds);
+        const timeText = timeInput.value || "No Time";
         const blurbText = blurbInput.value || "NO BLURB";
         const dateText = dateInput.value || "No Date"; // Uses date input or defaults to "No Date"
 
@@ -58,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
         updateTotalTime(); // Update the total time display
 
         // Clear input fields
+        timeInput.value ="";
         blurbInput.value = "";
         dateInput.value = "";
     });
@@ -178,17 +182,24 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
         // Display the total time in HH:MM:SS format
-        totalTimeDisplay.textContent = `Total Time: ${formatTime(totalSeconds)}`;
+        totalTimeDisplay.textContent = `${formatTime(totalSeconds)}`;
     }
 
     // My Tori Time: Toggles display of log entries when header is clicked
     const myToriTimeHeader = document.getElementById("my-tori-time");
     const logContainer = document.getElementById("log-container");
+    const myCalculateTimeHeader = document.getElementById("calculate-tori-time");
+    const calculateContainer = document.getElementById("calculator-container");
 
     // Initial state: collapse log entries
     logContainer.style.display = "none";
     myToriTimeHeader.addEventListener("click", function() {
         logContainer.style.display = logContainer.style.display === "none" ? "block" : "none";
+    });
+
+    calculateContainer.style.display = "none";
+    myCalculateTimeHeader.addEventListener("click", function() {
+        calculateContainer.style.display = calculateContainer.style.display === "none" ? "block" : "none";
     });
 
     var startDateTime = new Date(2024,8,8,19,27,0,0); // YYYY (M-1) D H m s (start time and date from DB)
@@ -218,3 +229,30 @@ function updateClock() {
 setInterval(updateClock, 1000);
 });
 
+
+document.getElementById("calculateBtn").addEventListener("click", function () {
+    const startDate = document.getElementById("startDate").value;
+    const startTime = document.getElementById("startTime").value;
+    const endDate = document.getElementById("endDate").value;
+    const endTime = document.getElementById("endTime").value;
+  
+    if (!startDate || !startTime || !endDate || !endTime) {
+      document.getElementById("result").textContent = "Please fill out all fields.";
+      return;
+    }
+  
+    const startDateTime = new Date(`${startDate}T${startTime}`);
+    const endDateTime = new Date(`${endDate}T${endTime}`);
+  
+    if (startDateTime >= endDateTime) {
+      document.getElementById("result").textContent = "The end date and time must be after the start date and time.";
+      return;
+    }
+  
+    const differenceMs = endDateTime - startDateTime;
+    const differenceHours = Math.floor(differenceMs / (1000 * 60 * 60));
+    const differenceMinutes = Math.floor((differenceMs % (1000 * 60 * 60)) / (1000 * 60));
+  
+    document.getElementById("result").textContent = `${differenceHours} hours and ${differenceMinutes} minutes`;
+  });
+  

@@ -4,7 +4,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-bottom: 100px;
     
 }
 
@@ -17,22 +16,17 @@ h2 {
     text-align: center;
 }
 
-#timer-display {
+#total-time {
     margin: 0;
     font-size: 150px;
     text-align: center;
 }
 
-#timer-display p {
+#total-time p {
     margin: 0;
 }
 
-#button-container {
-    width: 50%;
-    display: flex;
-    justify-content: space-evenly;
-    
-}
+
 
 button {
     width: 130px;
@@ -77,4 +71,24 @@ position: fixed;
 bottom: 0;
 width: 75%;
     
+}
+
+#calculator-container {
+    padding-bottom: 50px;
+}
+
+#calculator-container button {
+    margin-top: 15px;
+    padding: 5px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#calculate-tori-time:hover {
+    color:#880000;
 }
