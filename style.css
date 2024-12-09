@@ -37,9 +37,6 @@ img {
     width: 15%;
 }
 
-#log-time {
-    padding-top: 20px;
-}
 
 #blurb-input {
     width: 200px;
@@ -50,6 +47,7 @@ label {
     justify-content: center;
     padding-top: 10px;
 }
+
 
 #my-tori-time:hover {
     color:#880000;
@@ -73,9 +71,6 @@ width: 50%;
     
 }
 
-#calculator-container {
-    padding-bottom: 75px;
-}
 
 #calculator-container button {
     margin-top: 15px;
@@ -91,4 +86,25 @@ form {
 
 #calculate-tori-time:hover {
     color:#880000;
+}
+
+
+/* Container for both divs */
+.container {
+    display: flex; /* Use flexbox for side-by-side layout */
+    justify-content: space-between; /* Ensure even spacing */
+    gap: 20px; /* Optional: adds space between the two divs */
+    margin-top: 30px;
+}
+
+/* Both left and right containers */
+.left-container, .right-container {
+    flex: 1; /* Ensures both divs take up equal width */
+    border: 1px solid #ccc; /* Optional: adds a border for visualization */
+    padding: 0 auto 0 auto; /* Adds spacing inside the divs */
+    box-sizing: border-box; /* Includes padding and border in the width */
+}
+
+#calculator-container {
+    padding: 0 20px 20px 20px;
 }
